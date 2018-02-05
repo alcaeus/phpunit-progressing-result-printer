@@ -7,8 +7,9 @@
         { "name": "alcaeus", "email": "alcaeus@alcaeus.org" }
     ],
     "require": {
-        "phpunit/phpunit": "^6.0",
-        "symfony/console": "^3.3"
+        "phpunit/phpunit": "^7.0",
+        "phpunit/php-timer": "^2.0.0",
+        "symfony/console": "^3.4 || ^4.0"
     },
     "autoload": {
         "psr-4": {
