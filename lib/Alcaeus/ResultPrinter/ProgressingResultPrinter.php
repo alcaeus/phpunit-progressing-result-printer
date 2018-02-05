@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
 use PHPUnit\Runner\PhptTestCase;
 use PHPUnit\Util\Printer;
+use SebastianBergmann\Timer\Timer;
 use Symfony\Component\Console;
 
 final class ProgressingResultPrinter extends Printer implements TestListener
@@ -62,7 +63,7 @@ final class ProgressingResultPrinter extends Printer implements TestListener
     {
     }
 
-    public function write($buffer): void
+    public function write(string $buffer): void
     {
         if ($this->progress !== null) {
             $this->progress->clear();
@@ -76,34 +77,34 @@ final class ProgressingResultPrinter extends Printer implements TestListener
         }
     }
 
-    public function addError(Test $test, \Exception $e, $time): void
+    public function addError(Test $test, \Throwable $e, float $time): void
     {
         $this->result->addError($test, $e, $time);
         $this->printFailure(static::TYPE_ERROR, new TestFailure($test, $e));
     }
 
-    public function addWarning(Test $test, Warning $e, $time): void
+    public function addWarning(Test $test, Warning $e, float $time): void
     {
         $this->result->addError($test, $e, $time);
     }
 
-    public function addFailure(Test $test, AssertionFailedError $e, $time): void
+    public function addFailure(Test $test, AssertionFailedError $e, float $time): void
     {
         $this->result->addFailure($test, $e, $time);
         $this->printFailure(static::TYPE_FAILURE, new TestFailure($test, $e));
     }
 
-    public function addIncompleteTest(Test $test, \Exception $e, $time): void
+    public function addIncompleteTest(Test $test, \Throwable $e, float $time): void
     {
         $this->result->addError($test, $e, $time);
     }
 
-    public function addRiskyTest(Test $test, \Exception $e, $time): void
+    public function addRiskyTest(Test $test, \Throwable $e, float $time): void
     {
         $this->result->addError($test, $e, $time);
     }
 
-    public function addSkippedTest(Test $test, \Exception $e, $time): void
+    public function addSkippedTest(Test $test, \Throwable $e, float $time): void
     {
         $this->result->addError($test, $e, $time);
     }
@@ -132,7 +133,7 @@ final class ProgressingResultPrinter extends Printer implements TestListener
         $this->result->startTest($test);
     }
 
-    public function endTest(Test $test, $time): void
+    public function endTest(Test $test, float $time): void
     {
         $this->result->endTest($test, $time);
         $this->progress->advance();
@@ -225,7 +226,7 @@ final class ProgressingResultPrinter extends Printer implements TestListener
             )
         );
 
-        $this->output->writeln(\PHP_Timer::resourceUsage());
+        $this->output->writeln(Timer::resourceUsage());
     }
 
     private function printUnstableTests(string $label, TestFailure ...$failures): void
